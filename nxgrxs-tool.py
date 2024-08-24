@@ -143,8 +143,42 @@ def escaneo_qubo():
                 print("\n")
 
                 comando = f"java -Dfile.encoding=UTF-8 -jar qubo.jar -ports {puertos} -th {threads} -ti {timeout} -noping -range {ip}"
+                ejecucion = subprocess.Popen(comando, text=True ,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                print_tiempo_real = True
+                while print_tiempo_real:
+                    if ejecucion.poll() is not None:
+                        print_tiempo_real = False
+                    else:
+                        print(ejecucion.stdout.readline(), end="")
             case "2":
-                pass
+                print("\n" + " "*20 + "[$] Ingrese la ruta directa del archivo .txt" + "\n")
+                print(" "*22 + "[!] Ejemplo » C:/Users/Nicolas/Desktop/nxgrxs/ranges.txt" + "\n")
+
+                path = input(mensaje_qubo_cmd)
+                with open(path, "r", encoding="utf-8") as archivo:
+                    data_ips = archivo.readlines()
+                
+                print("\n" + " "*20 + "[$] Ingrese los puertos a escanear con el siguiente formato EJ: X-XXXXX" + "\n")
+                puertos = input(mensaje_qubo_cmd)
+
+                print("\n" + " "*20 + "[$] Ingrese las THREADS a usar" + "\n")
+                threads = input(mensaje_qubo_cmd)
+
+                print("\n" + " "*20 + "[$] Ingrese el TIMEOUT" + "\n")
+                timeout = input(mensaje_qubo_cmd)
+                print("\n")
+
+                for ip in data_ips:
+                    comando = f"java -Dfile.encoding=UTF-8 -jar qubo.jar -ports {puertos} -th {threads} -ti {timeout} -noping -range {ip}"
+                    ejecucion = subprocess.Popen(comando, text=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    print_tiempo_real = True
+
+                    while print_tiempo_real:
+                        if ejecucion.poll() is not None:
+                            print_tiempo_real = False
+                        else:
+                            print(ejecucion.stdout.readline(), end="")
             case "3":
                 return
             case _:
@@ -154,7 +188,6 @@ def escaneo_qubo():
 def escaneo_nmap():
     print("[!] Ingrese la IP a escanear")
     ip_nmap = input("nmap@nxgrxs:~$ ")
-
 
 while bandera:
     os.system("cls")
@@ -179,3 +212,5 @@ while bandera:
             bandera = False
         case _:
             pass
+
+os.system("cls")
