@@ -84,7 +84,8 @@ def dibujar_titulos(clave):
                                          [2] - Escaneo con (Qubo)
                                          [3] - Escaneo con (Nmap)
                                          [4] - Checkeo de puertos
-                                         [5] - Salir
+                                         [5] - Obtener UUID-MC
+                                         [6] - Salir
                                     └───────────────────────────────────┘
 """)
         
@@ -138,6 +139,17 @@ def dibujar_titulos(clave):
                                          [2] - Escaneo 1-65535
                                          [3] - Salir al menu
                                     └───────────────────────────────────┘
+""")
+    elif clave == "titulo_uuid":
+        print("""
+
+              
+                            ██╗   ██╗██╗   ██╗██╗██████╗       ███╗   ███╗ ██████╗
+                            ██║   ██║██║   ██║██║██╔══██╗      ████╗ ████║██╔════╝
+                            ██║   ██║██║   ██║██║██║  ██║█████╗██╔████╔██║██║     
+                            ██║   ██║██║   ██║██║██║  ██║╚════╝██║╚██╔╝██║██║     
+                            ╚██████╔╝╚██████╔╝██║██████╔╝      ██║ ╚═╝ ██║╚██████╗
+                             ╚═════╝  ╚═════╝ ╚═╝╚═════╝       ╚═╝     ╚═╝ ╚═════╝
 """)
 
 def escanear_ip_qubo(puertos:str, threads:str, timeout:str, ip:str):
@@ -263,6 +275,51 @@ def escaneo_nmap(clave: str, msj_nmap: str):
     input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
     os.system("cls")
 
+def obtener_uuid():
+    dibujar_titulos("titulo_uuid")
+    print("\n" + " "*20 + "[!] Ingrese el nombre" + "\n")
+    nombre_mc = input(" "*13 + "uuid@nxgrxs:~$ ")
+
+    url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
+    payload = {
+        "uuids": {nombre_mc},
+        "export": "json",
+        "_token": "pjygTb4qC258bzSxnInZJt8dIT1MwcowgtSUUqPI"
+    }
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Cookie": "XSRF-TOKEN=eyJpdiI6IjBTekpyMWF4NkVQVDRsQWx3YVJydWc9PSIsInZhbHVlIjoiZks2dW9rZFhjWS9IZHhFVnhsZGRLSXZ1SEtRQmdZRk9jK2oveW9Va2RNd1MyWm8rY1VOandCQXoxSENxUU1EVHVyUWk2WmJlVVBidFNFWFNNdnNGSDYzdVVvL3ZQNHd0dFBIWFJ5ZVEwS2xRUVBXUDJ5U0pDS1JVcE84NkxXVysiLCJtYWMiOiIyMWQ4Yzk5YmYwODdhMmY1NmNlNzEzZGJlMjI4YWI3MTcyMWU3MGNlY2YxNjAxNTliNWNkNGZlOTZiMzZlNmQ5IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6ImJsbzg3QTRsZkkyU2VUaFlWUVg0Qnc9PSIsInZhbHVlIjoiSXJTUU54SkI1SmtERDZmU2JDOU9UZldsMXBoRnk0VlVQYkVQUVl3a3haY0xSM3FHMmwzRkh5T3U4M3d3R3lQWTJWUmtmbHFJVlhaVHdybVZicjVyMGM4dGZWOXVvRnMwd01IcVFGNTd6ek5aMTc4UVJ2ZDZpY3EreEZxdVE3MDkiLCJtYWMiOiIxOWY0ODVmYzAzZDY2ZGEyYzlmY2JmYjg1N2NhMmFmMWQ0NzAwNzNmNDlkMTc2YmQ2YzhhY2QxNzM2NTU5MmIwIiwidGFnIjoiIn0%3D"
+    }
+
+    response_offline = requests.post(url_offline_uuid, data=payload, headers=headers)
+    data_uuid_offline = response_offline.text.split('"')
+
+    api_mc = f"https://api.mojang.com/users/profiles/minecraft/{nombre_mc}"
+    response_mc = requests.get(api_mc)
+    data = response_mc.json()
+
+    if data.get("id") is None:
+        uuid_premium = "NO PREMIUM"
+    else:
+        uuid_premium = data.get("id")
+    
+    if data_uuid_offline[9] == "illegal characters - only alphanumeric characters allowed.":
+        uuid_no_premium = "ILLEGAL CHARACTERS"
+    else:
+        uuid_no_premium = data_uuid_offline[9]
+
+    print(f"""
+                        ┌─────────────────────────────────────────────────────────────┐
+
+                            (Nick) » {nombre_mc}
+                            (PREMIUM) » {uuid_premium}
+                            (NO-PREMIUM) » {uuid_no_premium}
+
+                        └─────────────────────────────────────────────────────────────┘
+""")
+    
+    input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
+
 def opciones_nmap():
     while True:
         dibujar_titulos("escaneo_nmap")
@@ -300,6 +357,9 @@ while bandera:
         case "4":
             pass
         case "5":
+            os.system("cls")
+            obtener_uuid()
+        case "6":
             bandera = False
         case _:
             pass
