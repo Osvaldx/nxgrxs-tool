@@ -53,7 +53,7 @@ def obtener_info_servidor():
         else:
             print("\n" + " "*20 + "[!] Server offline o no existe!" + "\n")
         
-        continuar = input(" "*9 + "[$] Presione Enter para volver al menu ")
+        input(" "*9 + "[$] Presione Enter para volver al menu ")
     except:
         print("\n" + " "*20 + "[!] La IP ingresada no es valida")
         time.sleep(5)
@@ -140,6 +140,17 @@ def dibujar_titulos(clave):
                                     └───────────────────────────────────┘
 """)
 
+def escanear_ip_qubo(puertos:str, threads:str, timeout:str, ip:str):
+    comando = f"java -Dfile.encoding=UTF-8 -jar qubo.jar -ports {puertos} -th {threads} -ti {timeout} -noping -range {ip}"
+    ejecucion = subprocess.Popen(comando, text=True ,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print_tiempo_real = True
+
+    while print_tiempo_real:
+        if ejecucion.poll() is not None:
+            print_tiempo_real = False
+        else:
+            print(ejecucion.stdout.readline(), end="")
+
 def escaneo_qubo(clave:str, mensaje_qubo_cmd:str):
     if clave == "escaneo_unica_ip":
         print("\n" + " "*20 + "[$] Ingrese la IP a escanear" + "\n")
@@ -163,30 +174,15 @@ def escaneo_qubo(clave:str, mensaje_qubo_cmd:str):
     timeout = input(mensaje_qubo_cmd)
     print("\n")
 
-    comando = f"java -Dfile.encoding=UTF-8 -jar qubo.jar -ports {puertos} -th {threads} -ti {timeout} -noping -range {ip}"
-
     if clave == "escaneo_unica_ip":
-        ejecucion = subprocess.Popen(comando, text=True ,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print_tiempo_real = True
-
-        while print_tiempo_real:
-            if ejecucion.poll() is not None:
-                print_tiempo_real = False
-            else:
-                print(ejecucion.stdout.readline(), end="")
-        
-        continuar = input("")
+        escanear_ip_qubo(puertos, threads, timeout, ip)
 
     elif clave == "escaneo_multiple":
         for ip in data_ips:
-            ejecucion = subprocess.Popen(comando, text=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            print_tiempo_real = True
-
-            while print_tiempo_real:
-                if ejecucion.poll() is not None:
-                    print_tiempo_real = False
-                else:
-                    print(ejecucion.stdout.readline(), end="")
+            escanear_ip_qubo(puertos, threads, timeout, ip)
+    
+    input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
+    os.system("cls")
 
 def opciones_qubo():
     while True:
@@ -205,71 +201,73 @@ def opciones_qubo():
                 return
             case _:
                 os.system("cls")
-                pass
+                break
+
+def escanear_ip_nmap(ip:str, opcion_escaneo_all: bool, opcion_escaneo_ports_mc: bool):
+    if opcion_escaneo_all:
+        comando = f"nmap -p 1-65535 -T4 -A --open -v -Pn {ip}"
+    elif opcion_escaneo_ports_mc:
+        puertos = "1-12,1000-1010,20000-20005,25000-25002,25500-25640,28010-28015,30000-30005,40000-40010,65500-65535"
+        comando = f"nmap -p {puertos} -T5 -A -v {ip}"
+
+    ejecucion = subprocess.Popen(comando, text=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    while True:
+        if ejecucion.poll() is not None:
+            break
+        else:
+            print(ejecucion.stdout.readline(), end="")
 
 def escaneo_nmap(clave: str, msj_nmap: str):
-    opcion_multiple = False
     if clave == "escaneo_unica_ip":
-        print(" "*20 + "[!] Ingrese la IP a escanear")
-        ip = input(" "*13 + msj_nmap)
+        print("\n" + " "*20 + "[!] Ingrese la IP a escanear" + "\n")
+        ip = input(msj_nmap)
 
     elif clave == "escaneo_multiple":
         print("\n" + " "*20 + "[$] Ingrese la ruta directa del archivo .txt" + "\n")
         print(" "*22 + "[!] Ejemplo » C:/Users/Nicolas/Desktop/nxgrxs/ips.txt" + "\n")
-        path = input(" "*13 + msj_nmap)
+        path = input(msj_nmap)
 
         with open(path, "r", encoding="utf-8") as archivo:
             data_ips = archivo.readlines()
-        opcion_multiple = True
-        
-    opcion_elegida = False
-    bandera = True
+    
+    opcion_escaneo_ports_mc = False
+    opcion_escaneo_all = False
+    iniciar_escaneo = False
 
-    while bandera:
+    while True:
         dibujar_titulos("opciones_escaneo_nmap")
         opcion_escaneo_nmap = input(msj_nmap)
 
         match opcion_escaneo_nmap:
             case "1":
-                puertos = "1-12,1000-1010,20000-20005,25000-25002,25500-25640,28010-28015,30000-30005,40000-40010,65500-65535"
-                comando = f"nmap -p {puertos} -T5 -A -v {ip}"
-                opcion_elegida = True
-                bandera = False
+                opcion_escaneo_ports_mc = True
+                iniciar_escaneo = True
+                break
             case "2":
-                comando = f"nmap -p 1-65535 -T4 -A --open -v -Pn {ip}"
-                opcion_elegida = True
-                bandera = False
+                opcion_escaneo_all = True
+                iniciar_escaneo = True
+                break
             case "3":
-                bandera = False
+                return
             case _:
                 pass
     
-    if opcion_elegida == True:
-        if opcion_multiple == False:
-            ejecucion = subprocess.Popen(comando, text=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if clave == "escaneo_unica_ip" and iniciar_escaneo == True:
+        escanear_ip_nmap(ip, opcion_escaneo_all, opcion_escaneo_ports_mc)
 
-            while True:
-                if ejecucion.poll() is not None:
-                    break
-                else:
-                    print(ejecucion.stdout.readline(), end="")
-        elif opcion_multiple == True:
-            for ip in data_ips:
-                ejecucion = subprocess.Popen(comando, text=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-                while True:
-                    if ejecucion.poll() is not None:
-                        break
-                    else:
-                        print(ejecucion.stdout.readline(), end="")
-    else:
-        return
+    elif clave == "escaneo_multiple" and iniciar_escaneo == True:
+        for ip in data_ips:
+            escanear_ip_nmap(ip, opcion_escaneo_all, opcion_escaneo_ports_mc)
+    
+    input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
+    os.system("cls")
 
 def opciones_nmap():
     while True:
         dibujar_titulos("escaneo_nmap")
         dibujar_titulos("opciones_escaneo")
-        msj_nmap = "nmap@nxgrxs:~$ "
+        msj_nmap = " "*13 + "nmap@nxgrxs:~$ "
         ingreso_opcion = input(msj_nmap)
 
         match ingreso_opcion:
@@ -278,7 +276,8 @@ def opciones_nmap():
             case "2":
                 escaneo_nmap("escaneo_multiple",msj_nmap)
             case "3":
-                pass
+                os.system("cls")
+                break
 
 while bandera:
     os.system("cls")
