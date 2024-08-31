@@ -263,7 +263,7 @@ def escaneo_nmap(clave: str, msj_nmap: str):
             case "3":
                 return
             case _:
-                pass
+                os.system("cls")
     
     if clave == "escaneo_unica_ip" and iniciar_escaneo == True:
         escanear_ip_nmap(ip, opcion_escaneo_all, opcion_escaneo_ports_mc)
@@ -284,11 +284,11 @@ def obtener_uuid():
     payload = {
         "uuids": {nombre_mc},
         "export": "json",
-        "_token": "pjygTb4qC258bzSxnInZJt8dIT1MwcowgtSUUqPI"
+        "_token": "GoVUhkLQh9xXucUNw3idxU0LCTzMW83QWp1IJIZb"
     }
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Cookie": "XSRF-TOKEN=eyJpdiI6IjBTekpyMWF4NkVQVDRsQWx3YVJydWc9PSIsInZhbHVlIjoiZks2dW9rZFhjWS9IZHhFVnhsZGRLSXZ1SEtRQmdZRk9jK2oveW9Va2RNd1MyWm8rY1VOandCQXoxSENxUU1EVHVyUWk2WmJlVVBidFNFWFNNdnNGSDYzdVVvL3ZQNHd0dFBIWFJ5ZVEwS2xRUVBXUDJ5U0pDS1JVcE84NkxXVysiLCJtYWMiOiIyMWQ4Yzk5YmYwODdhMmY1NmNlNzEzZGJlMjI4YWI3MTcyMWU3MGNlY2YxNjAxNTliNWNkNGZlOTZiMzZlNmQ5IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6ImJsbzg3QTRsZkkyU2VUaFlWUVg0Qnc9PSIsInZhbHVlIjoiSXJTUU54SkI1SmtERDZmU2JDOU9UZldsMXBoRnk0VlVQYkVQUVl3a3haY0xSM3FHMmwzRkh5T3U4M3d3R3lQWTJWUmtmbHFJVlhaVHdybVZicjVyMGM4dGZWOXVvRnMwd01IcVFGNTd6ek5aMTc4UVJ2ZDZpY3EreEZxdVE3MDkiLCJtYWMiOiIxOWY0ODVmYzAzZDY2ZGEyYzlmY2JmYjg1N2NhMmFmMWQ0NzAwNzNmNDlkMTc2YmQ2YzhhY2QxNzM2NTU5MmIwIiwidGFnIjoiIn0%3D"
+        "Cookie": "XSRF-TOKEN=eyJpdiI6IlhhU3YzZ1BFemtFcGQ3TytyMlpYbXc9PSIsInZhbHVlIjoiYURaZm1sTWdhazNtb3V3STRyTzR4RHA2a0kzeWFiRHp5SjExUHY2YVFkZEtINDM3anNCcXE3akVHS0dpYlV1eDUxKzR6S0xsR2k2ZVNQL0lGbmlGRStmRTdxQnlITWFpZ2VPWGYwVG5YVkNrWENNZEtyOGprR08vZkZ0eUVVMjIiLCJtYWMiOiI1NzVmOTA1MjNiMmI2ZDEwZDgzZWZiZDFjMTBmY2FlNmYwN2I2MTQ3MDdiMzM5NTVhMGZlNjg3NzQ0YzM1YTY3IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IktmRjZKU05FRU5KazMzSHlGbUVTdlE9PSIsInZhbHVlIjoiVTVGN2xxanBoTE45V1l0cVU2VDBoeCszU2tFazZtVHduU0dWTlQ1VWtMWm1kOVA4dU95YXFHdjRXd3VqbEtSUkxTb3I1ZmVsMGRjUXhRbm5yY0l4dENaM3NUQm9ROE9YMHlXNjZkNFVrWGdLMHZyTWJDaXdNTWQ5M2NISTlDR08iLCJtYWMiOiI5MjRlMmRhZDg4YmNkZmIxNDEzMjZhOWY1YWFhMmFhZDA2OTE3MWNlNjYzNDE4MzY1NjQyYjI0YTg1MmMyZjE2IiwidGFnIjoiIn0%3D"
     }
 
     response_offline = requests.post(url_offline_uuid, data=payload, headers=headers)
@@ -335,6 +335,8 @@ def opciones_nmap():
             case "3":
                 os.system("cls")
                 break
+            case _:
+                os.system("cls")
 
 while bandera:
     os.system("cls")
