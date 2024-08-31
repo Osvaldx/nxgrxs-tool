@@ -10,6 +10,10 @@
 - **Obtener UUID de Minecraft:** Recupera el UUID de un jugador de Minecraft, tanto en servidores premium como en no premium.
 
 ## Opciones del Menú
+- **Opciones del menu:**
+
+![image](https://github.com/user-attachments/assets/3959620e-428c-445f-a442-0d2fc0010ccf)
+
 - **Obtener info servidor:** Ingresa la IP del servidor de Minecraft para obtener información detallada.
 
 ![image](https://github.com/user-attachments/assets/8c866e9f-5b78-449b-b5d2-6743a7d3c4f6)
