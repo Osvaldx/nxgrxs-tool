@@ -261,6 +261,7 @@ def escaneo_nmap(clave: str, msj_nmap: str):
                 iniciar_escaneo = True
                 break
             case "3":
+                os.system("cls")
                 return
             case _:
                 os.system("cls")
