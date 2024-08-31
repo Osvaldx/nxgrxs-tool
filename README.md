@@ -11,19 +11,23 @@
 
 ## Opciones del Menú
 - **Obtener info servidor:** Ingresa la IP del servidor de Minecraft para obtener información detallada.
+
 ![image](https://github.com/user-attachments/assets/8c866e9f-5b78-449b-b5d2-6743a7d3c4f6)
 
 - **Escaneo con Qubo:** Realiza un escaneo de puertos utilizando Qubo, con opciones para escanear una única IP o múltiples IPs desde un archivo.
+
 ![image](https://github.com/user-attachments/assets/f9eb70de-82ca-4779-a7ea-4ec61af2e7b3)
 ![image](https://github.com/user-attachments/assets/481a5871-173f-476b-8384-71789dbfbaad)
 
 - **Escaneo con Nmap:** Realiza un escaneo de puertos utilizando Nmap, con opciones para escanear puertos específicos de Minecraft o todos los puertos.
+
 ![image](https://github.com/user-attachments/assets/a6da7a1a-33bc-4553-b5ce-30883fbc4f95)
 
 - **Checkeo de puertos:** Realiza una comprobación rápida de los puertos abiertos (no programada).
 [photo]
 
 - **Obtener UUID-MC:** Recupera el UUID de un jugador de Minecraft.
+
 ![image](https://github.com/user-attachments/assets/0f4a8bd2-30f8-47c5-a377-13381fdd62ab)
 
 ## Instalación
