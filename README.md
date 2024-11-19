@@ -25,7 +25,7 @@
 
 - **Escaneo con Nmap:** Realiza un escaneo de puertos utilizando Nmap, con opciones para escanear puertos específicos de Minecraft o todos los puertos.
 
-![image](https://github.com/user-attachments/assets/a6da7a1a-33bc-4553-b5ce-30883fbc4f95)
+![image](https://github.com/user-attachments/assets/9c28f8f2-bdd4-4cb7-9cda-c664f14d4270)
 
 - **Checkeo de puertos:** Realiza una comprobación rápida de los puertos abiertos (no programada).
 [photo]
