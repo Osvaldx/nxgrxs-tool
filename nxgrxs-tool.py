@@ -85,7 +85,8 @@ def dibujar_titulos(clave):
                                          [3] - Escaneo con (Nmap)
                                          [4] - Checkeo de puertos
                                          [5] - Obtener UUID-MC
-                                         [6] - Salir
+                                         [6] - Ordenar (TXT) escaneo
+                                         [7] - Salir
                                     └───────────────────────────────────┘
 """)
         
@@ -276,20 +277,47 @@ def escaneo_nmap(clave: str, msj_nmap: str):
     input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
     os.system("cls")
 
+def validar_token(token: str, nombre)-> str:
+    url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
+    payload = {
+        "uuids": {nombre},
+        "export": "json",
+        "_token": {token}
+    }
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Cookie": "XSRF-TOKEN=eyJpdiI6IlhUU1RMVTdOcHRGekVCVUlweTc1L1E9PSIsInZhbHVlIjoiK2xCWXhNQVN2MVZFbGJzOElSTVNOZDVTbE12NnZUN0IyejFaSzErQW0xdUJmME9CdVVmbzhhOVN6bDNvOE4rMEszeU1ZYVpmdFgxd1hjclk5Y0F1UWw4TmU3MGNhTVA0K1hZNDEvajBIcVc1TjRBRWlMMjNXemRPRTk5dWhYb2MiLCJtYWMiOiI4ODZjODdmMzkzMTA1NDA4YjQ4ZTdhZTBiZjVjZTY4MjBmNjk1MDBjM2ExYWYyOGEyN2Q0NWUxNjAyYTYxZTE2IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IkFPdlNYdUwvSU1uZFg5VEFtU3YvMmc9PSIsInZhbHVlIjoiQ0xsNkw1T1pDNkZ0LzVGRFJCdC9kK3J1SmlUTWt1M3JQdWliVG84S01weHQ2aXRvbk5WdkVTcW1PSmE4THk3Zmo1Uk9oOExHS3FKUE1vbGsvbGx5N3JqN3MvNkRwRE9TQSs3bURMRWlLSHFKTnJEalA0TXlDRzgrdjZ3eFp4bVciLCJtYWMiOiI2MmJjMWQ4ODQzZjU4NWZlYzBmMWQzYmJmYWE5ODUzOTBjZjEyNGNkZDBiOWFjMWQ4YzJmOTQ2M2Y3YzI5Yzg0IiwidGFnIjoiIn0%3D"
+    }
+
+    rta = token
+
+    response_off = requests.post(url_offline_uuid, data=payload, headers=headers)
+    data_response = response_off.text.split('"')
+    for letra in data_response[9]:
+        if(letra == "-"):
+            rta = token
+            break
+        else:
+            rta = data_response[9]
+
+    return rta
+
 def obtener_uuid():
     dibujar_titulos("titulo_uuid")
     print("\n" + " "*20 + "[!] Ingrese el nombre" + "\n")
     nombre_mc = input(" "*13 + "uuid@nxgrxs:~$ ")
 
     url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
+    token_payload = "412TSnRL7mblMDtgRAN3sjzbzHxCOEqtJNwfz9IHL7"
+    token_payload = validar_token(token_payload,nombre_mc)
     payload = {
         "uuids": {nombre_mc},
         "export": "json",
-        "_token": "GoVUhkLQh9xXucUNw3idxU0LCTzMW83QWp1IJIZb"
+        "_token": {token_payload}
     }
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Cookie": "XSRF-TOKEN=eyJpdiI6IlhhU3YzZ1BFemtFcGQ3TytyMlpYbXc9PSIsInZhbHVlIjoiYURaZm1sTWdhazNtb3V3STRyTzR4RHA2a0kzeWFiRHp5SjExUHY2YVFkZEtINDM3anNCcXE3akVHS0dpYlV1eDUxKzR6S0xsR2k2ZVNQL0lGbmlGRStmRTdxQnlITWFpZ2VPWGYwVG5YVkNrWENNZEtyOGprR08vZkZ0eUVVMjIiLCJtYWMiOiI1NzVmOTA1MjNiMmI2ZDEwZDgzZWZiZDFjMTBmY2FlNmYwN2I2MTQ3MDdiMzM5NTVhMGZlNjg3NzQ0YzM1YTY3IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IktmRjZKU05FRU5KazMzSHlGbUVTdlE9PSIsInZhbHVlIjoiVTVGN2xxanBoTE45V1l0cVU2VDBoeCszU2tFazZtVHduU0dWTlQ1VWtMWm1kOVA4dU95YXFHdjRXd3VqbEtSUkxTb3I1ZmVsMGRjUXhRbm5yY0l4dENaM3NUQm9ROE9YMHlXNjZkNFVrWGdLMHZyTWJDaXdNTWQ5M2NISTlDR08iLCJtYWMiOiI5MjRlMmRhZDg4YmNkZmIxNDEzMjZhOWY1YWFhMmFhZDA2OTE3MWNlNjYzNDE4MzY1NjQyYjI0YTg1MmMyZjE2IiwidGFnIjoiIn0%3D"
+        "Cookie": "XSRF-TOKEN=eyJpdiI6IlhUU1RMVTdOcHRGekVCVUlweTc1L1E9PSIsInZhbHVlIjoiK2xCWXhNQVN2MVZFbGJzOElSTVNOZDVTbE12NnZUN0IyejFaSzErQW0xdUJmME9CdVVmbzhhOVN6bDNvOE4rMEszeU1ZYVpmdFgxd1hjclk5Y0F1UWw4TmU3MGNhTVA0K1hZNDEvajBIcVc1TjRBRWlMMjNXemRPRTk5dWhYb2MiLCJtYWMiOiI4ODZjODdmMzkzMTA1NDA4YjQ4ZTdhZTBiZjVjZTY4MjBmNjk1MDBjM2ExYWYyOGEyN2Q0NWUxNjAyYTYxZTE2IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IkFPdlNYdUwvSU1uZFg5VEFtU3YvMmc9PSIsInZhbHVlIjoiQ0xsNkw1T1pDNkZ0LzVGRFJCdC9kK3J1SmlUTWt1M3JQdWliVG84S01weHQ2aXRvbk5WdkVTcW1PSmE4THk3Zmo1Uk9oOExHS3FKUE1vbGsvbGx5N3JqN3MvNkRwRE9TQSs3bURMRWlLSHFKTnJEalA0TXlDRzgrdjZ3eFp4bVciLCJtYWMiOiI2MmJjMWQ4ODQzZjU4NWZlYzBmMWQzYmJmYWE5ODUzOTBjZjEyNGNkZDBiOWFjMWQ4YzJmOTQ2M2Y3YzI5Yzg0IiwidGFnIjoiIn0%3D"
     }
 
     response_offline = requests.post(url_offline_uuid, data=payload, headers=headers)
@@ -363,6 +391,8 @@ while bandera:
             os.system("cls")
             obtener_uuid()
         case "6":
+            pass
+        case "7":
             bandera = False
         case _:
             pass
