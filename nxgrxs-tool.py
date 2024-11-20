@@ -277,51 +277,38 @@ def escaneo_nmap(clave: str, msj_nmap: str):
     input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
     os.system("cls")
 
-def validar_token(token: str, nombre)-> str:
-    url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
-    payload = {
-        "uuids": {nombre},
-        "export": "json",
-        "_token": {token}
-    }
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Cookie": "XSRF-TOKEN=eyJpdiI6IlhUU1RMVTdOcHRGekVCVUlweTc1L1E9PSIsInZhbHVlIjoiK2xCWXhNQVN2MVZFbGJzOElSTVNOZDVTbE12NnZUN0IyejFaSzErQW0xdUJmME9CdVVmbzhhOVN6bDNvOE4rMEszeU1ZYVpmdFgxd1hjclk5Y0F1UWw4TmU3MGNhTVA0K1hZNDEvajBIcVc1TjRBRWlMMjNXemRPRTk5dWhYb2MiLCJtYWMiOiI4ODZjODdmMzkzMTA1NDA4YjQ4ZTdhZTBiZjVjZTY4MjBmNjk1MDBjM2ExYWYyOGEyN2Q0NWUxNjAyYTYxZTE2IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IkFPdlNYdUwvSU1uZFg5VEFtU3YvMmc9PSIsInZhbHVlIjoiQ0xsNkw1T1pDNkZ0LzVGRFJCdC9kK3J1SmlUTWt1M3JQdWliVG84S01weHQ2aXRvbk5WdkVTcW1PSmE4THk3Zmo1Uk9oOExHS3FKUE1vbGsvbGx5N3JqN3MvNkRwRE9TQSs3bURMRWlLSHFKTnJEalA0TXlDRzgrdjZ3eFp4bVciLCJtYWMiOiI2MmJjMWQ4ODQzZjU4NWZlYzBmMWQzYmJmYWE5ODUzOTBjZjEyNGNkZDBiOWFjMWQ4YzJmOTQ2M2Y3YzI5Yzg0IiwidGFnIjoiIn0%3D"
-    }
+def response_api_mc_offline(nombre_mc: str)->str:
+    bandera = True
+    token_payload = "token"
+    while bandera:
+        url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
+        payload = {
+            "uuids": {nombre_mc},
+            "export": "json",
+            "_token": {token_payload}
+        }
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie": "XSRF-TOKEN=eyJpdiI6IlhUU1RMVTdOcHRGekVCVUlweTc1L1E9PSIsInZhbHVlIjoiK2xCWXhNQVN2MVZFbGJzOElSTVNOZDVTbE12NnZUN0IyejFaSzErQW0xdUJmME9CdVVmbzhhOVN6bDNvOE4rMEszeU1ZYVpmdFgxd1hjclk5Y0F1UWw4TmU3MGNhTVA0K1hZNDEvajBIcVc1TjRBRWlMMjNXemRPRTk5dWhYb2MiLCJtYWMiOiI4ODZjODdmMzkzMTA1NDA4YjQ4ZTdhZTBiZjVjZTY4MjBmNjk1MDBjM2ExYWYyOGEyN2Q0NWUxNjAyYTYxZTE2IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IkFPdlNYdUwvSU1uZFg5VEFtU3YvMmc9PSIsInZhbHVlIjoiQ0xsNkw1T1pDNkZ0LzVGRFJCdC9kK3J1SmlUTWt1M3JQdWliVG84S01weHQ2aXRvbk5WdkVTcW1PSmE4THk3Zmo1Uk9oOExHS3FKUE1vbGsvbGx5N3JqN3MvNkRwRE9TQSs3bURMRWlLSHFKTnJEalA0TXlDRzgrdjZ3eFp4bVciLCJtYWMiOiI2MmJjMWQ4ODQzZjU4NWZlYzBmMWQzYmJmYWE5ODUzOTBjZjEyNGNkZDBiOWFjMWQ4YzJmOTQ2M2Y3YzI5Yzg0IiwidGFnIjoiIn0%3D"
+        }
 
-    rta = token
+        response_offline = requests.post(url_offline_uuid, data=payload, headers=headers)
+        data_response = response_offline.text.split('"')
 
-    response_off = requests.post(url_offline_uuid, data=payload, headers=headers)
-    data_response = response_off.text.split('"')
-    for letra in data_response[9]:
-        if(letra == "-"):
-            rta = token
+        if(data_response[9].count("-") >= 1):
+            bandera = False
             break
         else:
-            rta = data_response[9]
+            token_payload = data_response[9]
 
-    return rta
+    return data_response
 
 def obtener_uuid():
     dibujar_titulos("titulo_uuid")
     print("\n" + " "*20 + "[!] Ingrese el nombre" + "\n")
     nombre_mc = input(" "*13 + "uuid@nxgrxs:~$ ")
 
-    url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
-    token_payload = "412TSnRL7mblMDtgRAN3sjzbzHxCOEqtJNwfz9IHL7"
-    token_payload = validar_token(token_payload,nombre_mc)
-    payload = {
-        "uuids": {nombre_mc},
-        "export": "json",
-        "_token": {token_payload}
-    }
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Cookie": "XSRF-TOKEN=eyJpdiI6IlhUU1RMVTdOcHRGekVCVUlweTc1L1E9PSIsInZhbHVlIjoiK2xCWXhNQVN2MVZFbGJzOElSTVNOZDVTbE12NnZUN0IyejFaSzErQW0xdUJmME9CdVVmbzhhOVN6bDNvOE4rMEszeU1ZYVpmdFgxd1hjclk5Y0F1UWw4TmU3MGNhTVA0K1hZNDEvajBIcVc1TjRBRWlMMjNXemRPRTk5dWhYb2MiLCJtYWMiOiI4ODZjODdmMzkzMTA1NDA4YjQ4ZTdhZTBiZjVjZTY4MjBmNjk1MDBjM2ExYWYyOGEyN2Q0NWUxNjAyYTYxZTE2IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IkFPdlNYdUwvSU1uZFg5VEFtU3YvMmc9PSIsInZhbHVlIjoiQ0xsNkw1T1pDNkZ0LzVGRFJCdC9kK3J1SmlUTWt1M3JQdWliVG84S01weHQ2aXRvbk5WdkVTcW1PSmE4THk3Zmo1Uk9oOExHS3FKUE1vbGsvbGx5N3JqN3MvNkRwRE9TQSs3bURMRWlLSHFKTnJEalA0TXlDRzgrdjZ3eFp4bVciLCJtYWMiOiI2MmJjMWQ4ODQzZjU4NWZlYzBmMWQzYmJmYWE5ODUzOTBjZjEyNGNkZDBiOWFjMWQ4YzJmOTQ2M2Y3YzI5Yzg0IiwidGFnIjoiIn0%3D"
-    }
-
-    response_offline = requests.post(url_offline_uuid, data=payload, headers=headers)
-    data_uuid_offline = response_offline.text.split('"')
+    data_uuid_offline = response_api_mc_offline(nombre_mc)
 
     api_mc = f"https://api.mojang.com/users/profiles/minecraft/{nombre_mc}"
     response_mc = requests.get(api_mc)
@@ -331,6 +318,16 @@ def obtener_uuid():
         uuid_premium = "NO PREMIUM"
     else:
         uuid_premium = data.get("id")
+        uuid_premium_formato = ""
+        indice_default = 8
+        num_espacio = 0
+        for i,char in enumerate(uuid_premium):
+            if((i == (indice_default + num_espacio)) and (i <= 20)):
+                uuid_premium_formato += "-"
+                indice_default = i
+                num_espacio = 4
+            uuid_premium_formato += char
+
     
     if data_uuid_offline[9] == "illegal characters - only alphanumeric characters allowed.":
         uuid_no_premium = "ILLEGAL CHARACTERS"
@@ -341,7 +338,7 @@ def obtener_uuid():
                         ┌─────────────────────────────────────────────────────────────┐
 
                             (Nick) » {nombre_mc}
-                            (PREMIUM) » {uuid_premium}
+                            (PREMIUM) » {uuid_premium_formato}
                             (NO-PREMIUM) » {uuid_no_premium}
 
                         └─────────────────────────────────────────────────────────────┘
