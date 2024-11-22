@@ -313,9 +313,8 @@ def obtener_uuid():
     api_mc = f"https://api.mojang.com/users/profiles/minecraft/{nombre_mc}"
     response_mc = requests.get(api_mc)
     data = response_mc.json()
-
     if data.get("id") is None:
-        uuid_premium = "NO PREMIUM"
+        uuid_premium_formato = "NO PREMIUM"
     else:
         uuid_premium = data.get("id")
         uuid_premium_formato = ""
