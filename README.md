@@ -37,7 +37,7 @@
 ## Instalación
 *Clona este repositorio:*
 ```bash
-  git clone https://github.com/tu-usuario/nxgrxs-griefing.git
+  git clone https://github.com/Osvaldx/nxgrxs-tool.git
 ```
 *Navega al directorio del proyecto:*
 ```bash
