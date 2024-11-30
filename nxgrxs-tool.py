@@ -58,6 +58,12 @@ def obtener_info_servidor():
         print("\n" + " "*20 + "[!] La IP ingresada no es valida")
         time.sleep(5)
 
+def clear_consola():
+    if(os.name == "nt"):
+        os.system("cls")
+    else:
+        os.system("clear")
+
 def dibujar_titulos(clave):
     if clave == "titulo_menu":
         print("""
@@ -195,7 +201,7 @@ def escaneo_qubo(clave:str, mensaje_qubo_cmd:str):
             escanear_ip_qubo(puertos, threads, timeout, ip)
     
     input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
-    os.system("cls")
+    clear_consola()
 
 def opciones_qubo():
     while True:
@@ -213,7 +219,7 @@ def opciones_qubo():
             case "3":
                 return
             case _:
-                os.system("cls")
+                clear_consola()
                 break
 
 def escanear_ip_nmap(ip:str, opcion_escaneo_all: bool, opcion_escaneo_ports_mc: bool):
@@ -262,10 +268,10 @@ def escaneo_nmap(clave: str, msj_nmap: str):
                 iniciar_escaneo = True
                 break
             case "3":
-                os.system("cls")
+                clear_consola()
                 return
             case _:
-                os.system("cls")
+                clear_consola()
     
     if clave == "escaneo_unica_ip" and iniciar_escaneo == True:
         escanear_ip_nmap(ip, opcion_escaneo_all, opcion_escaneo_ports_mc)
@@ -275,7 +281,7 @@ def escaneo_nmap(clave: str, msj_nmap: str):
             escanear_ip_nmap(ip, opcion_escaneo_all, opcion_escaneo_ports_mc)
     
     input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
-    os.system("cls")
+    clear_consola()
 
 def response_api_mc_offline(nombre_mc: str)->str:
     bandera = True
@@ -358,13 +364,13 @@ def opciones_nmap():
             case "2":
                 escaneo_nmap("escaneo_multiple",msj_nmap)
             case "3":
-                os.system("cls")
+                clear_consola()
                 break
             case _:
-                os.system("cls")
+                clear_consola()
 
 while bandera:
-    os.system("cls")
+    clear_consola()
     dibujar_titulos("titulo_menu")
     dibujar_titulos("opciones_menu")
 
@@ -372,19 +378,19 @@ while bandera:
 
     match ingreso_opcion:
         case "1":
-            os.system("cls")
+            clear_consola()
             dibujar_titulos("server_status")
             obtener_info_servidor()
         case "2":
-            os.system("cls")
+            clear_consola()
             opciones_qubo()
         case "3":
-            os.system("cls")
+            clear_consola()
             opciones_nmap()
         case "4":
             pass
         case "5":
-            os.system("cls")
+            clear_consola()
             obtener_uuid()
         case "6":
             pass
@@ -393,4 +399,4 @@ while bandera:
         case _:
             pass
 
-os.system("cls")
+clear_consola()
