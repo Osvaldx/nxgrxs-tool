@@ -2,6 +2,8 @@ import subprocess
 import requests
 import os
 import time
+import hashlib
+import uuid
 from colorama import init, Fore, Back, Style
 
 bandera = True
@@ -309,20 +311,14 @@ def response_api_mc_offline(nombre_mc: str)->str:
 
     return data_response
 
-def obtener_uuid():
-    dibujar_titulos("titulo_uuid")
-    print("\n" + " "*20 + "[!] Ingrese el nombre" + "\n")
-    nombre_mc = input(" "*13 + "uuid@nxgrxs:~$ ")
-
-    data_uuid_offline = response_api_mc_offline(nombre_mc)
-
-    api_mc = f"https://api.mojang.com/users/profiles/minecraft/{nombre_mc}"
-    response_mc = requests.get(api_mc)
-    data = response_mc.json()
-    if data.get("id") is None:
-        uuid_premium_formato = "NO PREMIUM"
-    else:
-        uuid_premium = data.get("id")
+def obtener_uuid(nombre: str)->dict:
+    url = "https://api.mojang.com/users/profiles/minecraft/"
+    response = requests.get(url + nombre)
+    datos = response.json()
+    uuids_jugador = {}
+    
+    if(datos.get('id')):
+        uuid_premium = datos.get('id')
         uuid_premium_formato = ""
         indice_default = 8
         num_espacio = 0
@@ -333,18 +329,28 @@ def obtener_uuid():
                 num_espacio = 4
             uuid_premium_formato += char
 
+        uuids_jugador["PremiumUUID"] = uuid_premium_formato
     
-    if data_uuid_offline[9] == "illegal characters - only alphanumeric characters allowed.":
-        uuid_no_premium = "ILLEGAL CHARACTERS"
-    else:
-        uuid_no_premium = data_uuid_offline[9]
+    formato_offline = 'OfflinePlayer:' + nombre
+    hash_md5 = hashlib.md5(formato_offline.encode(encoding="utf-8")).digest()
+    uuid_formato = str(uuid.UUID(bytes=hash_md5, version=3))
+    uuids_jugador["OfflineUUID"] = uuid_formato
+
+    return uuids_jugador
+
+def mensaje_uuid():
+    dibujar_titulos("titulo_uuid")
+    print("\n" + " "*20 + "[!] Ingrese el nombre" + "\n")
+    nombre_mc = input(" "*13 + "uuid@nxgrxs:~$ ")
+
+    datos = obtener_uuid(nombre_mc)
 
     print(f"""
                         ┌─────────────────────────────────────────────────────────────┐
 
                             (Nick) » {nombre_mc}
-                            (PREMIUM) » {uuid_premium_formato}
-                            (NO-PREMIUM) » {uuid_no_premium}
+                            (PREMIUM) » {datos.get('PremiumUUID') if datos.get('PremiumUUID') else "ES NO PREMIUM"}
+                            (NO-PREMIUM) » {datos.get('OfflineUUID')}
 
                         └─────────────────────────────────────────────────────────────┘
 """)
@@ -391,7 +397,7 @@ while bandera:
             pass
         case "5":
             clear_consola()
-            obtener_uuid()
+            mensaje_uuid()
         case "6":
             pass
         case "7":
