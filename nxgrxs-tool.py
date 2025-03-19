@@ -94,7 +94,9 @@ def dibujar_titulos(clave):
                                          [4] - Checkeo de puertos
                                          [5] - Obtener UUID-MC
                                          [6] - Ordenar (TXT) escaneo
-                                         [7] - Salir
+                                         [7] - Idioma / Language
+                                         [8] - Cargar configuracion
+                                         [9] - Salir
                                     └───────────────────────────────────┘
 """)
         
@@ -159,6 +161,17 @@ def dibujar_titulos(clave):
                             ██║   ██║██║   ██║██║██║  ██║╚════╝██║╚██╔╝██║██║     
                             ╚██████╔╝╚██████╔╝██║██████╔╝      ██║ ╚═╝ ██║╚██████╗
                              ╚═════╝  ╚═════╝ ╚═╝╚═════╝       ╚═╝     ╚═╝ ╚═════╝
+""")
+    elif clave == "ordenamiento":
+        print("""
+
+              
+                 ██████╗ ██████╗ ██████╗ ███████╗███╗   ██╗████████╗██╗  ██╗████████╗
+                ██╔═══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║╚══██╔══╝╚██╗██╔╝╚══██╔══╝
+                ██║   ██║██████╔╝██║  ██║█████╗  ██╔██╗ ██║   ██║    ╚███╔╝    ██║   
+                ██║   ██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║   ██║    ██╔██╗    ██║   
+                ╚██████╔╝██║  ██║██████╔╝███████╗██║ ╚████║██╗██║   ██╔╝ ██╗   ██║   
+                 ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝   ╚═╝  ╚═╝   ╚═╝   
 """)
 
 def escanear_ip_qubo(puertos:str, threads:str, timeout:str, ip:str):
@@ -285,32 +298,6 @@ def escaneo_nmap(clave: str, msj_nmap: str):
     input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
     clear_consola()
 
-def response_api_mc_offline(nombre_mc: str)->str:
-    bandera = True
-    token_payload = "token"
-    while bandera:
-        url_offline_uuid = "https://minecraft-serverlist.com/tools/offline-uuid"
-        payload = {
-            "uuids": {nombre_mc},
-            "export": "json",
-            "_token": {token_payload}
-        }
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Cookie": "XSRF-TOKEN=eyJpdiI6IlhUU1RMVTdOcHRGekVCVUlweTc1L1E9PSIsInZhbHVlIjoiK2xCWXhNQVN2MVZFbGJzOElSTVNOZDVTbE12NnZUN0IyejFaSzErQW0xdUJmME9CdVVmbzhhOVN6bDNvOE4rMEszeU1ZYVpmdFgxd1hjclk5Y0F1UWw4TmU3MGNhTVA0K1hZNDEvajBIcVc1TjRBRWlMMjNXemRPRTk5dWhYb2MiLCJtYWMiOiI4ODZjODdmMzkzMTA1NDA4YjQ4ZTdhZTBiZjVjZTY4MjBmNjk1MDBjM2ExYWYyOGEyN2Q0NWUxNjAyYTYxZTE2IiwidGFnIjoiIn0%3D; _mcsl_session=eyJpdiI6IkFPdlNYdUwvSU1uZFg5VEFtU3YvMmc9PSIsInZhbHVlIjoiQ0xsNkw1T1pDNkZ0LzVGRFJCdC9kK3J1SmlUTWt1M3JQdWliVG84S01weHQ2aXRvbk5WdkVTcW1PSmE4THk3Zmo1Uk9oOExHS3FKUE1vbGsvbGx5N3JqN3MvNkRwRE9TQSs3bURMRWlLSHFKTnJEalA0TXlDRzgrdjZ3eFp4bVciLCJtYWMiOiI2MmJjMWQ4ODQzZjU4NWZlYzBmMWQzYmJmYWE5ODUzOTBjZjEyNGNkZDBiOWFjMWQ4YzJmOTQ2M2Y3YzI5Yzg0IiwidGFnIjoiIn0%3D"
-        }
-
-        response_offline = requests.post(url_offline_uuid, data=payload, headers=headers)
-        data_response = response_offline.text.split('"')
-
-        if(data_response[9].count("-") >= 1):
-            bandera = False
-            break
-        else:
-            token_payload = data_response[9]
-
-    return data_response
-
 def obtener_uuid(nombre: str)->dict:
     url = "https://api.mojang.com/users/profiles/minecraft/"
     response = requests.get(url + nombre)
@@ -375,6 +362,15 @@ def opciones_nmap():
             case _:
                 clear_consola()
 
+def ordenamiento():
+    dibujar_titulos("ordenamiento")
+
+    print("\n" + " "*20 + "[$] Ingrese la ruta directa del archivo .txt" + "\n")
+    print(" "*22 + "[!] Ejemplo » C:/Users/Nicolas/Desktop/nxgrxs/escaneo.txt" + "\n")
+
+    mensaje_order_cmd = " "*13 + f"order@nxgrxs:~$ "
+    path = str(input(mensaje_order_cmd))
+
 while bandera:
     clear_consola()
     dibujar_titulos("titulo_menu")
@@ -399,8 +395,13 @@ while bandera:
             clear_consola()
             mensaje_uuid()
         case "6":
-            pass
+            clear_consola()
+            ordenamiento()
         case "7":
+            pass # modificar idioma
+        case "8":
+            pass # cargar configuracion
+        case "9":
             bandera = False
         case _:
             pass
