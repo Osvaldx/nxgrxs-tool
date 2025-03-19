@@ -362,6 +362,42 @@ def opciones_nmap():
             case _:
                 clear_consola()
 
+def order_archivo(ruta: str)->bool:
+    try:
+        with open(file=ruta,mode="r",encoding="utf-8") as archivo:
+            datos = archivo.readlines()
+
+        diccionario_datos = []
+        for i,linea in enumerate(datos):
+            if(linea.count("(") > 0):
+                try:
+                    lista_linea = []
+                    linea_separada = linea.split("(")
+                    agregada = False
+                    if(len(diccionario_datos) > 0):
+                        for linea2 in diccionario_datos:
+                            if(linea.split("(")[1] == linea2[1].split("(")[1]):
+                                agregada = True
+                    
+                    if(agregada == False):
+                        lista_linea.append(int(linea_separada[2].split("/")[0]))
+                        lista_linea.append(linea)
+                        diccionario_datos.append(lista_linea)
+                except:
+                    continue
+        
+        diccionario_datos.sort(key=(lambda x:x[0]),reverse=True)
+
+        with open(file=ruta, mode="w", encoding="utf-8") as archivo:
+            for linea in diccionario_datos:
+                archivo.write(linea[1])
+        
+        retorno = True
+    except:
+        retorno = False
+    
+    return retorno
+
 def ordenamiento():
     dibujar_titulos("ordenamiento")
 
@@ -369,7 +405,10 @@ def ordenamiento():
     print(" "*22 + "[!] Ejemplo » C:/Users/Nicolas/Desktop/nxgrxs/escaneo.txt" + "\n")
 
     mensaje_order_cmd = " "*13 + f"order@nxgrxs:~$ "
-    path = str(input(mensaje_order_cmd))
+    ruta = str(input(mensaje_order_cmd))
+    
+    print("\n" + " "*22 + "[!] Se ORDENO correctamente!" if order_archivo(ruta) else "\n" + " "*22 + "[X] Archivo no encontrado o ruta incorrecta")
+    input("\n" + " "*13 + "[$] Presione Enter para volver al menu " + "\n")
 
 while bandera:
     clear_consola()
